@@ -24,7 +24,7 @@ def add_paths(folder, files):
 def main():
     cxx = 'g++'
     cflags = '-Wall -Wextra -pedantic -std=c++17'
-    includeflags = ''
+    includeflags = '-Isrc'
 
     linkerflags = '-lraylib'
 
