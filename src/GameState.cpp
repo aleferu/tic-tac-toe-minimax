@@ -20,12 +20,12 @@ bool GameState::isPlayerTurn() {
     return m_playerTurn;
 }
 
-void GameState::drawSymbols(const int screenSize) {
+void GameState::drawSymbols(const int screenSize, const float hOffset, const float vOffset) {
     for (int row = 0; row < 3; ++row) {
         for (int col = 0; col < 3; ++col) {
             switch (m_board[3 * row + col]) {
                 case 'x':
-                    drawX(screenSize, row, col);
+                    drawX(screenSize, hOffset, vOffset, row, col);
                     break;
                 case 'o':
                     drawO(screenSize, row, col);
@@ -56,13 +56,17 @@ void GameState::checkWinner(const char symbol) {
                                 || (m_board[3*i] == symbol && m_board[3*i+1] == symbol && m_board[3*i+2] == symbol); // rows
 }
 
-void GameState::drawX(const float screenSize, const int row, const int col) {
+void GameState::drawX(const float screenSize, const float hOffset, const float vOffset, const int row, const int col) {
     float thirdSize = screenSize / 3.0f;
-    float offset = thirdSize / 6.0f;
+    float padding = thirdSize / 6.0f;
     float thickness = 50.0f;
     Color color = RED;
-    DrawLineEx({thirdSize * col + offset, thirdSize * row + offset}, {thirdSize * (col+1) - offset, thirdSize * (row+1) - offset}, thickness, color);
-    DrawLineEx({thirdSize * (col+1) - offset, thirdSize * row + offset}, {thirdSize * col + offset, thirdSize * (row+1) - offset}, thickness, color);
+    DrawLineEx({thirdSize * col + padding + hOffset, thirdSize * row + padding + vOffset}, 
+               {thirdSize * (col+1) - padding + hOffset, thirdSize * (row+1) - padding + vOffset}, 
+               thickness, color);
+    DrawLineEx({thirdSize * (col+1) - padding + hOffset, thirdSize * row + padding + vOffset}, 
+               {thirdSize * col + padding + hOffset, thirdSize * (row+1) - padding + vOffset}, 
+               thickness, color);
 }
 
 void GameState::drawO(const float screenSize, const int row, const int col) {

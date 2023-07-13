@@ -7,7 +7,7 @@ public:
     void resetState();
     void nextTurn();
     bool isPlayerTurn();
-    void drawSymbols(const int screenSize);
+    void drawSymbols(const int screenSize, const float hOffset, const float vOffset);
     void setX(const int row, const int col);
     bool isGameOver();
     void checkWinner(const char symbol);
@@ -16,7 +16,7 @@ private:
     bool m_playerTurn;
     bool m_gameOver;
     char m_board[9];
-    void drawX(const float screenSize, const int row, const int col);
+    void drawX(const float screenSize, const float hOffset, const float vOffset, const int row, const int col);
     void drawO(const float screenSize, const int row, const int col);
 };
 
