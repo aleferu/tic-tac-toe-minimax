@@ -1,10 +1,9 @@
 #include "GameState.hpp"
 #include <algorithm>
 #include <ctime>
-#include <iostream>
 #include "raylib.h"
 
-GameState::GameState() : m_playerTurn(time(nullptr) % 2) {
+GameState::GameState() : m_playerTurn(time(nullptr) % 2), m_gameOver(false) {
     std::fill(m_board, m_board + 9, ' ');
 }
 
@@ -38,12 +37,23 @@ void GameState::drawSymbols(const int screenSize) {
     }
 }
 
-bool GameState::setX(const int row, const int col) {
+void GameState::setX(const int row, const int col) {
     if (m_board[3 * row + col] == ' ') {
         m_board[3 * row + col] = 'x';
-        return true;
+        nextTurn();
     }
-    return false;
+}
+
+bool GameState::isGameOver() { return m_gameOver; }
+
+void GameState::checkWinner(const char symbol) {
+    // diags (\ and /)
+    m_gameOver = (m_board[0] == symbol && m_board[4] == symbol && m_board[8] == symbol)
+              || (m_board[2] == symbol && m_board[4] == symbol && m_board[6] == symbol);
+    // rows and cols
+    for (int i = 0; i < 3; ++i)
+        m_gameOver = m_gameOver || (m_board[3*i] == symbol && m_board[3*(i+1)] == symbol && m_board[3*(i+2)] == symbol) // cols
+                                || (m_board[3*i] == symbol && m_board[3*i+1] == symbol && m_board[3*i+2] == symbol); // rows
 }
 
 void GameState::drawX(const float screenSize, const int row, const int col) {

@@ -15,13 +15,20 @@ int main(void) {
     // Main loop
     while (!WindowShouldClose()) {
         // Input
-        if (gameState.isPlayerTurn()) { // I don't know if I'm going to need this separated or merged
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                Vector2 mousePos = GetMousePosition();
-                float mouseX = screenSize - 1 < mousePos.x ? screenSize - 1 : mousePos.x;
-                float mouseY = screenSize - 1 < mousePos.y ? screenSize - 1 : mousePos.y;
-                gameState.setX(static_cast<int> (mouseY / screenSize * 3.0f), static_cast<int> (mouseX / screenSize * 3.0f));
+        if (!gameState.isGameOver()) {
+            if (gameState.isPlayerTurn()) { // I don't know if I'm going to need this separated or merged
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    Vector2 mousePos = GetMousePosition();
+                    float mouseX = screenSize - 1 < mousePos.x ? screenSize - 1 : mousePos.x;
+                    float mouseY = screenSize - 1 < mousePos.y ? screenSize - 1 : mousePos.y;
+                    gameState.setX(static_cast<int> (mouseY / screenSize * 3.0f), static_cast<int> (mouseX / screenSize * 3.0f));
+                    gameState.checkWinner('x');
+                }
+            } else { 
+                //gameState.minimax(true);
+                gameState.checkWinner('o');
             }
+        } else if (IsKeyPressed(KEY_R)) gameState.resetState();
 
         // Draw
         BeginDrawing();
@@ -31,6 +38,8 @@ int main(void) {
             gameState.drawSymbols(screenSize);
 
         EndDrawing();
+
+        std::cout << gameState.isGameOver() << std::endl;
     }
     CloseWindow();
 
