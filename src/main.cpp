@@ -1,6 +1,5 @@
 #include "raylib.h"
 #include "GameState.hpp"
-#include <iostream>
 
 
 void drawBoard(const float, const float, const float);
@@ -29,7 +28,7 @@ int main(void) {
 
         // Input
         if (!gameState.isGameOver()) {
-            if (gameState.isPlayerTurn()) { // I don't know if I'm going to need this separated or merged
+            if (gameState.isPlayerTurn()) {
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     Vector2 mousePos = GetMousePosition();
                     mousePos.x -= hOffset;
@@ -40,10 +39,12 @@ int main(void) {
                     gameState.checkWinner('x');
                 }
             } else { 
-                //gameState.minimax(true);
+                gameState.setO();
                 gameState.checkWinner('o');
             }
-        } else if (IsKeyPressed(KEY_R)) gameState.resetState();
+        } else if (IsKeyPressed(KEY_R)) {
+            gameState.resetState();
+        }
 
         // Draw
         BeginDrawing();
