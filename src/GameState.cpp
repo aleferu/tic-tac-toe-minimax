@@ -21,12 +21,12 @@ void GameState::nextTurn() {
 }
 
 
-bool GameState::isPlayerTurn() {
+bool GameState::isPlayerTurn() const {
     return m_playerTurn;
 }
 
 
-void GameState::drawSymbols(const int screenSize, const float hOffset, const float vOffset) {
+void GameState::drawSymbols(const int screenSize, const float hOffset, const float vOffset) const {
     for (int row = 0; row < 3; ++row) {
         for (int col = 0; col < 3; ++col) {
             switch (m_board[3 * row + col]) {
@@ -54,38 +54,38 @@ void GameState::setX(const int row, const int col) {
 
 
 void GameState::setO() {
-    char board_copy[9];
+    char boardCopy[9];
     for (int i = 0; i < 9; ++i)
-        board_copy[i] = m_board[i];
-    int best_score = -10;
-    int best_move = -1;
+        boardCopy[i] = m_board[i];
+    int bestScore = -10;
+    int bestMove = -1;
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             int index = 3 * i + j;
-            if (board_copy[index] == ' ') {
-                board_copy[index] = 'o';
-                int score = GameState::minimax(board_copy, false);
-                board_copy[index] = ' ';
-                if (score > best_score) {
-                    best_score = score;
-                    best_move = index;
+            if (boardCopy[index] == ' ') {
+                boardCopy[index] = 'o';
+                int score = GameState::minimax(boardCopy, false);
+                boardCopy[index] = ' ';
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = index;
                 }
             }
         }
     }
-    m_board[best_move] = 'o';
+    m_board[bestMove] = 'o';
     nextTurn();
 }
 
 
-bool GameState::isGameOver() { return m_gameOver; }
+bool GameState::isGameOver() const { return m_gameOver; }
 
 
 void GameState::checkWinner(const char symbol) {
     // diags (\ and /)
     m_gameOver = (m_board[0] == symbol && m_board[4] == symbol && m_board[8] == symbol)
               || (m_board[2] == symbol && m_board[4] == symbol && m_board[6] == symbol)
-              || GameState::boardFilled(m_board);
+              || GameState::isBoardFilled(m_board);
     // rows and cols
     for (int i = 0; i < 3; ++i)
         m_gameOver = m_gameOver || (m_board[i] == symbol && m_board[i+3] == symbol && m_board[i+6] == symbol) // cols
@@ -93,7 +93,7 @@ void GameState::checkWinner(const char symbol) {
 }
 
 
-void GameState::drawX(const float screenSize, const float hOffset, const float vOffset, const int row, const int col) {
+void GameState::drawX(const float screenSize, const float hOffset, const float vOffset, const int row, const int col) const {
     float thirdSize = screenSize / 3.0f;
     float padding = thirdSize / 6.0f;
     float thickness = 50.0f;
@@ -107,7 +107,7 @@ void GameState::drawX(const float screenSize, const float hOffset, const float v
 }
 
 
-void GameState::drawO(const float screenSize, const float hOffset, const float vOffset, const int row, const int col) {
+void GameState::drawO(const float screenSize, const float hOffset, const float vOffset, const int row, const int col) const {
     float thirdSize = screenSize / 3.0f;
     float thirdHalf = thirdSize / 2.0f;
     float outerRadius = 5.0f * thirdHalf / 6.0f;
@@ -118,15 +118,15 @@ void GameState::drawO(const float screenSize, const float hOffset, const float v
 }
 
 
-int GameState::minimax(char board[9], const bool is_max_turn) {
-    int board_score = GameState::evaluateBoard(board);
-    if (board_score == 1 || board_score == -1) return board_score;
-    if (GameState::boardFilled(board)) {
+int GameState::minimax(char board[9], const bool isMaxTurn) {
+    int boardScore = GameState::evaluateBoard(board);
+    if (boardScore == 1 || boardScore == -1) return boardScore;
+    if (GameState::isBoardFilled(board)) {
         return 0;
     } 
 
-    if (is_max_turn) {
-        int best_score = -10;
+    if (isMaxTurn) {
+        int bestScore = -10;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 int index = 3 * i + j;
@@ -134,15 +134,15 @@ int GameState::minimax(char board[9], const bool is_max_turn) {
                     board[index] = 'o';
                     int score = GameState::minimax(board, false);
                     board[index] = ' ';
-                    if (score > best_score) {
-                        best_score = score;
+                    if (score > bestScore) {
+                        bestScore = score;
                     }
                 }
             }
         }
-        return best_score;
+        return bestScore;
     } else {
-        int worst_score = 10;
+        int worstScore = 10;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 int index = 3 * i + j;
@@ -150,13 +150,13 @@ int GameState::minimax(char board[9], const bool is_max_turn) {
                     board[index] = 'x';
                     int score = GameState::minimax(board, true);
                     board[index] = ' ';
-                    if (score < worst_score) {
-                        worst_score = score;
+                    if (score < worstScore) {
+                        worstScore = score;
                     }
                 }
             }
         }
-        return worst_score;
+        return worstScore;
     }
 }
 
@@ -176,7 +176,7 @@ int GameState::evaluateBoard(const char board[9]) {
 }
 
 
-bool GameState::boardFilled(const char board[9]) {
+bool GameState::isBoardFilled(const char board[9]) {
     for (int i = 0; i < 9; ++i) {
         if (board[i] == ' ') {
             return false;

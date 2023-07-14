@@ -2,7 +2,7 @@
 #include "GameState.hpp"
 
 
-void drawBoard(const float, const float, const float);
+static inline void drawBoard(const float, const float, const float);
 
 
 int main(void) {
@@ -61,7 +61,7 @@ int main(void) {
 }
 
 
-void drawBoard(const float screenSize, const float hOffset, const float vOffset) {
+static inline void drawBoard(const float screenSize, const float hOffset, const float vOffset) {
     float firstThird = screenSize / 3.0f;
     float secondThird = 2.0f * screenSize / 3.0f;
     float thickness = 5.0f;
