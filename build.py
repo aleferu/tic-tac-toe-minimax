@@ -36,7 +36,6 @@ def main():
     if not os.path.isdir(obj_folder):
         os.mkdir(obj_folder)
     for file in code_files:
-        if file.endswith('.hpp'): continue
         name = os.path.join(obj_folder, file.split(os.sep)[-1][:-4] + '.o')
         execute_command(f'{cxx} {cflags} -c {file} {includeflags} -o {name}')
 
