@@ -18,6 +18,7 @@ private:
     bool m_playerTurn;
     bool m_gameOver;
     char m_board[9];
+    inline void playerTurnInit();
     void drawX(const float screenSize, const float hOffset, const float vOffset, const int row, const int col) const;
     void drawO(const float screenSize, const float hOffset, const float vOffset, const int row, const int col) const;
     static int minimax(char board[9], const bool is_max_turn);

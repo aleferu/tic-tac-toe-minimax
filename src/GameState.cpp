@@ -1,16 +1,25 @@
 #include "GameState.hpp"
 #include <algorithm>
-#include <ctime>
+#include <random>
+#include <iostream>
 #include "raylib.h"
 
 
-GameState::GameState() : m_playerTurn(time(nullptr) % 2), m_gameOver(false) {
+GameState::GameState() : m_gameOver(false) {
     std::fill(m_board, m_board + 9, ' ');
+    playerTurnInit();
+}
+
+
+inline void GameState::playerTurnInit() {
+    static std::default_random_engine rng;
+    static std::normal_distribution<float> normDist;
+    m_playerTurn = normDist(rng) >= 0.0f;
 }
 
 
 void GameState::resetState() {
-    m_playerTurn = time(nullptr) % 2;
+    playerTurnInit();
     m_gameOver = false;
     std::fill(m_board, m_board + 9, ' ');
 }
