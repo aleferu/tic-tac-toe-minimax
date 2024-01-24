@@ -7,7 +7,7 @@
 
 ## How to play
  - Left click to place your x.
- - The AI are playing with the o.
+ - The AI is playing with the o.
  - Press the 'r' key to reset the game when over.
  - Resize the window at your liking.
 
@@ -21,6 +21,12 @@ or
 
 ```bash
 $ python3 build.py
+```
+
+or
+
+```bash
+$ ./build.sh
 ```
 
 or compile as you want. Don't forget to link raylib.
